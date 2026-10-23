@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TextWise AI</title>
+  <title>TextWise AI - Smart Text Tool</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col justify-between">
 
   <!-- Header -->
-  <header class="border-b bg-white px-4 py-3 flex justify-between items-center shadow-sm">
-    <h1 class="font-bold text-xl text-indigo-600 tracking-tight">TextWise AI</h1>
-    <button id="openApiKeyModal" class="px-3 py-1.5 text-sm bg-indigo-50 text-indigo-600 rounded-lg font-medium border border-indigo-200">
-      🔑 API Key
+  <header class="border-b bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center shadow-sm">
+    <div class="flex items-center space-x-2">
+      <div class="bg-indigo-600 text-white p-1.5 rounded-lg">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+      </div>
+      <h1 class="font-bold text-xl text-indigo-600 dark:text-indigo-400">TextWise AI</h1>
+    </div>
+    <button id="openApiKeyModal" class="px-3 py-1.5 text-sm bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-300 rounded-lg font-medium border border-indigo-200 dark:border-indigo-800 flex items-center gap-1">
+      <i data-lucide="key" class="w-4 h-4"></i>
+      <span>API Key</span>
     </button>
   </header>
 
@@ -21,72 +27,128 @@
   <main class="max-w-xl mx-auto px-4 py-6 w-full flex-grow">
 
     <!-- AdSense Top Banner -->
-    <div class="mb-6 p-3 border border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-400 bg-slate-100">
+    <div class="mb-6 p-3 border border-dashed border-slate-300 dark:border-slate-800 rounded-xl text-center text-xs text-slate-400 bg-slate-100 dark:bg-slate-900">
       Advertisement Space (Google AdSense Header Banner)
     </div>
 
-    <!-- Tool Card -->
-    <div class="bg-white rounded-2xl shadow-md border p-6 mb-6">
-      <label class="font-semibold text-base block mb-2 text-slate-700">Paste your text below</label>
-      <textarea id="inputText" rows="5" class="w-full p-3 border rounded-xl bg-slate-50 text-base mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Type or paste text here..."></textarea>
-      <div id="charCount" class="text-xs text-slate-400 mb-4">0 characters</div>
+    <!-- Main Tool Box -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-md border border-slate-200 dark:border-slate-800 p-6 mb-6">
+      <div class="flex justify-between items-center mb-2">
+        <label class="font-semibold text-base text-slate-700 dark:text-slate-200">Paste your text below</label>
+        <span id="charCount" class="text-xs text-slate-400">0 characters</span>
+      </div>
 
-      <label class="font-semibold text-base block mb-2 text-slate-700">Select AI Action</label>
-      <select id="actionSelect" class="w-full p-3 border rounded-xl bg-slate-50 text-base mb-5 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        <option value="summarize">Summarize Key Points</option>
+      <textarea id="inputText" rows="5" class="w-full p-3 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-base text-slate-800 dark:text-slate-100 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Paste or type article, draft, or notes here..."></textarea>
+
+      <label class="font-semibold text-base block mb-2 text-slate-700 dark:text-slate-200">Select AI Action</label>
+      <select id="actionSelect" class="w-full p-3 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-base mb-5 font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <option value="grammar">Fix Grammar & Enhance Style</option>
+        <option value="summarize">Summarize Key Points</option>
         <option value="academic">Academic / Formal Polish</option>
         <option value="bullets">Extract Key Action Items</option>
       </select>
 
-      <button id="generateBtn" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition">
-        Generate Output
-      </button>
+      <div class="flex gap-3">
+        <button id="clearBtn" class="px-4 py-3.5 text-slate-500 hover:text-slate-700 font-medium text-sm">Clear</button>
+        <button id="generateBtn" class="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg transition">
+          Generate Output
+        </button>
+      </div>
 
-      <div id="outputContainer" class="hidden mt-6 pt-5 border-t">
-        <h3 class="font-bold text-lg text-slate-800 mb-3">Result:</h3>
-        <div id="outputText" class="p-4 bg-slate-50 border rounded-xl text-base text-slate-900 whitespace-pre-wrap leading-relaxed shadow-inner"></div>
+      <div id="outputContainer" class="hidden mt-6 pt-5 border-t border-slate-200 dark:border-slate-800">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-bold text-lg text-slate-800 dark:text-slate-200">Result:</h3>
+          <button id="copyBtn" class="text-xs text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Copy Result</button>
+        </div>
+        <div id="outputText" class="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-base text-slate-900 dark:text-slate-100 whitespace-pre-wrap leading-relaxed shadow-inner"></div>
       </div>
     </div>
 
     <!-- AdSense Bottom Banner -->
-    <div class="p-3 border border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-400 bg-slate-100">
+    <div class="p-3 border border-dashed border-slate-300 dark:border-slate-800 rounded-xl text-center text-xs text-slate-400 bg-slate-100 dark:bg-slate-900">
       Advertisement Space (Google AdSense Middle Banner)
     </div>
 
   </main>
 
+  <!-- Footer with Legal & Contact Links -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
+    <div class="flex justify-center gap-6 mb-3 font-medium">
+      <button id="openPrivacy" class="hover:text-indigo-600 transition">Privacy Policy</button>
+      <button id="openTerms" class="hover:text-indigo-600 transition">Terms of Service</button>
+      <button id="openContact" class="hover:text-indigo-600 transition">Contact Us</button>
+    </div>
+    <p>© 2026 TextWise AI. All rights reserved. Powered by Google Gemini.</p>
+  </footer>
+
   <!-- API Key Modal -->
   <div id="apiKeyModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-      <h3 class="font-bold text-base mb-2 text-slate-900">Enter Gemini API Key</h3>
-      <input type="password" id="apiKeyInput" placeholder="AI Studio API Key" class="w-full p-3 border rounded-xl text-base mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 dark:border-slate-800">
+      <h3 class="font-bold text-base mb-2 text-slate-900 dark:text-slate-100">Enter Gemini API Key</h3>
+      <input type="password" id="apiKeyInput" placeholder="AI Studio API Key" class="w-full p-3 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 text-base mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500">
       <div class="flex justify-end gap-2">
-        <button id="closeApiKeyModal" class="px-4 py-2 text-sm text-slate-600 font-medium">Cancel</button>
+        <button id="closeApiKeyModal" class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 font-medium">Cancel</button>
         <button id="saveApiKey" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg font-semibold shadow">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Policy / Contact Popup Modal -->
+  <div id="infoModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800">
+      <h3 id="modalTitle" class="font-bold text-lg mb-3 text-slate-900 dark:text-slate-100"></h3>
+      <div id="modalBody" class="text-sm text-slate-600 dark:text-slate-300 mb-5 leading-relaxed space-y-2"></div>
+      <div class="flex justify-end">
+        <button id="closeInfoModal" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow">Close</button>
       </div>
     </div>
   </div>
 
   <!-- Script -->
   <script>
+    lucide.createIcons();
+
     const inputText = document.getElementById('inputText');
     const charCount = document.getElementById('charCount');
     const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
     const outputContainer = document.getElementById('outputContainer');
     const outputText = document.getElementById('outputText');
     const actionSelect = document.getElementById('actionSelect');
+    const copyBtn = document.getElementById('copyBtn');
     
+    // Modals
     const apiKeyModal = document.getElementById('apiKeyModal');
     const openApiKeyModal = document.getElementById('openApiKeyModal');
     const closeApiKeyModal = document.getElementById('closeApiKeyModal');
     const saveApiKey = document.getElementById('saveApiKey');
     const apiKeyInput = document.getElementById('apiKeyInput');
 
+    const infoModal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeInfoModal = document.getElementById('closeInfoModal');
+    
+    const openPrivacy = document.getElementById('openPrivacy');
+    const openTerms = document.getElementById('openTerms');
+    const openContact = document.getElementById('openContact');
+
     inputText.addEventListener('input', () => {
       charCount.textContent = inputText.value.length + ' characters';
     });
 
+    clearBtn.addEventListener('click', () => {
+      inputText.value = '';
+      charCount.textContent = '0 characters';
+      outputContainer.classList.add('hidden');
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(outputText.textContent);
+      alert('Copied to clipboard!');
+    });
+
+    // API Key Handlers
     openApiKeyModal.addEventListener('click', () => {
       apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
       apiKeyModal.classList.remove('hidden');
@@ -104,6 +166,30 @@
       }
     });
 
+    // Footer Modals Handlers
+    openPrivacy.addEventListener('click', () => {
+      modalTitle.textContent = 'Privacy Policy';
+      modalBody.innerHTML = '<p>At TextWise AI, your privacy is important to us. All text processing is performed securely via the Gemini API using your own API key saved locally on your browser. We do not store or track your personal texts.</p>';
+      infoModal.classList.remove('hidden');
+    });
+
+    openTerms.addEventListener('click', () => {
+      modalTitle.textContent = 'Terms of Service';
+      modalBody.innerHTML = '<p>By using TextWise AI, you agree to use the tool responsibly. This tool is provided free of charge as-is without warranties. You must supply your own valid API key to generate AI responses.</p>';
+      infoModal.classList.remove('hidden');
+    });
+
+    openContact.addEventListener('click', () => {
+      modalTitle.textContent = 'Contact Us';
+      modalBody.innerHTML = '<p>Have questions, feedback, or partnership inquiries regarding TextWise AI? You can reach out directly via email at support@textwiseai.com.</p>';
+      infoModal.classList.remove('hidden');
+    });
+
+    closeInfoModal.addEventListener('click', () => {
+      infoModal.classList.add('hidden');
+    });
+
+    // AI Generation Handler
     generateBtn.addEventListener('click', async () => {
       const text = inputText.value.trim();
       const apiKey = localStorage.getItem('gemini_api_key');
@@ -114,16 +200,16 @@
       const action = actionSelect.value;
       let promptText = '';
 
-      if (action === 'summarize') promptText = 'Summarize briefly in 1-2 bullet points: ' + text;
-      else if (action === 'grammar') promptText = 'Provide directly only the corrected text without extra explanations: ' + text;
-      else if (action === 'academic') promptText = 'Rewrite in formal academic style briefly: ' + text;
-      else if (action === 'bullets') promptText = 'Extract key points in brief bullet points: ' + text;
+      if (action === 'grammar') promptText = 'Correct all grammar and spelling errors. Return ONLY the improved text directly without explanations:\n\n' + text;
+      else if (action === 'summarize') promptText = 'Provide a brief 2-bullet summary of this text:\n\n' + text;
+      else if (action === 'academic') promptText = 'Rewrite into clear formal academic style concisely:\n\n' + text;
+      else if (action === 'bullets') promptText = 'Extract bullet points of key takeaways:\n\n' + text;
 
       generateBtn.disabled = true;
-      generateBtn.textContent = 'Processing...';
+      generateBtn.textContent = '⚡ Processing fast...';
 
       try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -134,7 +220,7 @@
         const data = await res.json();
         if (data.error) {
           alert('Error: ' + data.error.message);
-        } else {
+        } else if (data.candidates && data.candidates[0].content.parts[0].text) {
           outputText.textContent = data.candidates[0].content.parts[0].text;
           outputContainer.classList.remove('hidden');
         }
