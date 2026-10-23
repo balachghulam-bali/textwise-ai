@@ -11,20 +11,27 @@
 
   <!-- Header -->
   <header class="border-b bg-white px-4 py-3 flex justify-between items-center shadow-sm">
-    <h1 class="font-bold text-lg text-indigo-600">TextWise AI</h1>
+    <h1 class="font-bold text-xl text-indigo-600 tracking-tight">TextWise AI</h1>
     <button id="openApiKeyModal" class="px-3 py-1.5 text-sm bg-indigo-50 text-indigo-600 rounded-lg font-medium border border-indigo-200">
-      API Key
+      🔑 API Key
     </button>
   </header>
 
-  <!-- Main -->
-  <main class="max-w-xl mx-auto px-4 py-8 w-full flex-grow">
-    <div class="bg-white rounded-2xl shadow-md border p-6">
-      <label class="font-semibold text-sm block mb-2 text-slate-700">Paste your text below</label>
+  <!-- Main Container -->
+  <main class="max-w-xl mx-auto px-4 py-6 w-full flex-grow">
+
+    <!-- AdSense Top Banner -->
+    <div class="mb-6 p-3 border border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-400 bg-slate-100">
+      Advertisement Space (Google AdSense Header Banner)
+    </div>
+
+    <!-- Tool Card -->
+    <div class="bg-white rounded-2xl shadow-md border p-6 mb-6">
+      <label class="font-semibold text-base block mb-2 text-slate-700">Paste your text below</label>
       <textarea id="inputText" rows="5" class="w-full p-3 border rounded-xl bg-slate-50 text-base mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Type or paste text here..."></textarea>
       <div id="charCount" class="text-xs text-slate-400 mb-4">0 characters</div>
 
-      <label class="font-semibold text-sm block mb-2 text-slate-700">Select AI Action</label>
+      <label class="font-semibold text-base block mb-2 text-slate-700">Select AI Action</label>
       <select id="actionSelect" class="w-full p-3 border rounded-xl bg-slate-50 text-base mb-5 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <option value="summarize">Summarize Key Points</option>
         <option value="grammar">Fix Grammar & Enhance Style</option>
@@ -32,15 +39,21 @@
         <option value="bullets">Extract Key Action Items</option>
       </select>
 
-      <button id="generateBtn" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:bg-indigo-700 transition flex items-center justify-center gap-2">
-        <span>Generate Output</span>
+      <button id="generateBtn" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition">
+        Generate Output
       </button>
 
       <div id="outputContainer" class="hidden mt-6 pt-5 border-t">
-        <h3 class="font-bold text-base text-slate-800 mb-3">Result:</h3>
+        <h3 class="font-bold text-lg text-slate-800 mb-3">Result:</h3>
         <div id="outputText" class="p-4 bg-slate-50 border rounded-xl text-base text-slate-900 whitespace-pre-wrap leading-relaxed shadow-inner"></div>
       </div>
     </div>
+
+    <!-- AdSense Bottom Banner -->
+    <div class="p-3 border border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-400 bg-slate-100">
+      Advertisement Space (Google AdSense Middle Banner)
+    </div>
+
   </main>
 
   <!-- API Key Modal -->
@@ -101,13 +114,13 @@
       const action = actionSelect.value;
       let promptText = '';
 
-      if (action === 'summarize') promptText = 'Summarize the following text clearly into key points: ' + text;
-      else if (action === 'grammar') promptText = 'Fix all spelling and grammar in the following text: ' + text;
-      else if (action === 'academic') promptText = 'Rewrite the following text into a formal academic tone: ' + text;
-      else if (action === 'bullets') promptText = 'Extract action items and key points into bullet points: ' + text;
+      if (action === 'summarize') promptText = 'Summarize briefly in 1-2 bullet points: ' + text;
+      else if (action === 'grammar') promptText = 'Provide directly only the corrected text without extra explanations: ' + text;
+      else if (action === 'academic') promptText = 'Rewrite in formal academic style briefly: ' + text;
+      else if (action === 'bullets') promptText = 'Extract key points in brief bullet points: ' + text;
 
       generateBtn.disabled = true;
-      generateBtn.textContent = 'Thinking... Please wait...';
+      generateBtn.textContent = 'Processing...';
 
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
