@@ -71,7 +71,7 @@
 
   </main>
 
-  <!-- Footer with Legal & Contact Links -->
+  <!-- Footer -->
   <footer class="border-t border-slate-200 dark:border-slate-800 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
     <div class="flex justify-center gap-6 mb-3 font-medium">
       <button id="openPrivacy" class="hover:text-indigo-600 transition">Privacy Policy</button>
@@ -117,7 +117,6 @@
     const actionSelect = document.getElementById('actionSelect');
     const copyBtn = document.getElementById('copyBtn');
     
-    // Modals
     const apiKeyModal = document.getElementById('apiKeyModal');
     const openApiKeyModal = document.getElementById('openApiKeyModal');
     const closeApiKeyModal = document.getElementById('closeApiKeyModal');
@@ -148,7 +147,6 @@
       alert('Copied to clipboard!');
     });
 
-    // API Key Handlers
     openApiKeyModal.addEventListener('click', () => {
       apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
       apiKeyModal.classList.remove('hidden');
@@ -166,7 +164,6 @@
       }
     });
 
-    // Footer Modals Handlers
     openPrivacy.addEventListener('click', () => {
       modalTitle.textContent = 'Privacy Policy';
       modalBody.innerHTML = '<p>At TextWise AI, your privacy is important to us. All text processing is performed securely via the Gemini API using your own API key saved locally on your browser. We do not store or track your personal texts.</p>';
@@ -189,7 +186,6 @@
       infoModal.classList.add('hidden');
     });
 
-    // AI Generation Handler
     generateBtn.addEventListener('click', async () => {
       const text = inputText.value.trim();
       const apiKey = localStorage.getItem('gemini_api_key');
@@ -212,14 +208,14 @@
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-        contents: [{ parts: [{ text: promptText }] }],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 250
-        }
-      })
-
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: promptText }] }],
+            generationConfig: {
+              temperature: 0.2,
+              maxOutputTokens: 250
+            }
+          })
+        });
 
         const data = await res.json();
         if (data.error) {
